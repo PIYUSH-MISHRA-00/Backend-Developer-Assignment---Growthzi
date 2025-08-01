@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Growthzi Backend API Testing</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+        section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        section h2 {
+            color: #2980b9;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 5px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus,
+        input[type="file"]:focus {
+            border-color: #2980b9;
+            outline: none;
+        }
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1c5980;
+        }
+        pre {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 250px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .flex-col {
+            flex: 1 1 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Growthzi Backend API Testing</h1>
+
+    <section>
+        <h2>1. Resume Upload</h2>
+        <form id="resumeForm">
+            <input type="file" id="resumeFile" name="file" accept=".pdf,.doc,.docx" required />
+            <button type="submit">Upload Resume</button>
+        </form>
+        <pre id="resumeResult"></pre>
+    </section>
+
+    <section>
+        <h2>2. Translate Content</h2>
+        <label for="translateContent">JSON Content</label>
+        <textarea id="translateContent" rows="6">{"about": "I am a developer", "hero": {"name": "John", "bio": "Creative Dev"}}</textarea>
+        <label for="targetLang">Target Language (e.g. fr)</label>
+        <input type="text" id="targetLang" placeholder="Enter target language code" />
+        <button id="translateBtn">Translate</button>
+        <pre id="translateResult"></pre>
+    </section>
+
+    <section>
+        <h2>3. Currency Price</h2>
+        <label for="countrySelect">Select Country</label>
+        <select id="countrySelect">
+            <option value="US">United States (USD)</option>
+            <option value="IN">India (INR)</option>
+            <option value="FR">France (EUR)</option>
+        </select>
+        <button id="priceBtn">Get Price</button>
+        <pre id="priceResult"></pre>
+    </section>
+
+    <section>
+        <h2>4. Facebook Growth AI</h2>
+        <div class="flex-row">
+            <div class="flex-col">
+                <h3>Content Ideas</h3>
+                <label for="fbWebsite">Website URL</label>
+                <input type="text" id="fbWebsite" placeholder="https://example.com" />
+                <label for="fbIndustry">Industry</label>
+                <input type="text" id="fbIndustry" placeholder="Industry (optional)" />
+                <button id="fbIdeasBtn">Generate Ideas</button>
+                <pre id="fbIdeasResult"></pre>
+            </div>
+            <div class="flex-col">
+                <h3>Content Planner</h3>
+                <label for="fbFrequency">Frequency (posts/week)</label>
+                <input type="number" id="fbFrequency" placeholder="e.g. 2" min="1" />
+                <label for="fbTone">Tone</label>
+                <input type="text" id="fbTone" placeholder="e.g. witty" />
+                <label for="fbPostMix">Post Mix (comma separated)</label>
+                <input type="text" id="fbPostMix" placeholder="educational, promotional" />
+                <button id="fbPlannerBtn">Generate Planner</button>
+                <pre id="fbPlannerResult"></pre>
+            </div>
+        </div>
+    </section>
+
+<script>
+document.getElementById('resumeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('resumeFile');
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    const res = await fetch('/api/parse-resume', { method: 'POST', body: formData });
+    const data = await res.json();
+    document.getElementById('resumeResult').textContent = JSON.stringify(data, null, 2);
+});
+
+document.getElementById('translateBtn').addEventListener('click', async () => {
+    const contentText = document.getElementById('translateContent').value;
+    const targetLang = document.getElementById('targetLang').value;
+    let content;
+    try {
+        content = JSON.parse(contentText);
+    } catch {
+        alert('Invalid JSON in content');
+        return;
+    }
+    const res = await fetch('/api/translate-content', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({content, target_lang: targetLang})
+    });
+    const data = await res.json();
+    document.getElementById('translateResult').textContent = JSON.stringify(data, null, 2);
+});
+
+document.getElementById('priceBtn').addEventListener('click', async () => {
+    const country = document.getElementById('countrySelect').value;
+    const res = await fetch(`/api/price?country=${country}`);
+    const data = await res.json();
+    document.getElementById('priceResult').textContent = JSON.stringify(data, null, 2);
+});
+
+document.getElementById('fbIdeasBtn').addEventListener('click', async () => {
+    const website_url = document.getElementById('fbWebsite').value;
+    const industry = document.getElementById('fbIndustry').value;
+    const res = await fetch('/api/facebook/ideas', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({website_url, industry})
+    });
+    const data = await res.json();
+    document.getElementById('fbIdeasResult').textContent = JSON.stringify(data, null, 2);
+});
+
+document.getElementById('fbPlannerBtn').addEventListener('click', async () => {
+    const frequency = parseInt(document.getElementById('fbFrequency').value);
+    const tone = document.getElementById('fbTone').value;
+    const post_mix = document.getElementById('fbPostMix').value.split(',').map(s => s.trim());
+    const res = await fetch('/api/facebook/planner', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({frequency, tone, post_mix})
+    });
+    const data = await res.json();
+    document.getElementById('fbPlannerResult').textContent = JSON.stringify(data, null, 2);
+});
+</script>
+</body>
+</html>

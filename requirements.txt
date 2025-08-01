@@ -1,0 +1,6 @@
+Flask
+Flask-CORS
+python-docx
+pdfminer.six
+google-generativeai
+python-dotenv

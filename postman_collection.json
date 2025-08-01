@@ -1,0 +1,165 @@
+{
+  "info": {
+    "name": "Backend Project API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Parse Resume",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": ""
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/parse-resume",
+          "host": ["{{base_url}}"],
+          "path": ["api", "parse-resume"]
+        }
+      }
+    },
+    {
+      "name": "Translate Content",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": {\n    \"about\": \"I am a developer\",\n    \"hero\": {\"name\": \"John\", \"bio\": \"Creative Dev\"}\n  },\n  \"target_lang\": \"fr\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/translate-content",
+          "host": ["{{base_url}}"],
+          "path": ["api", "translate-content"]
+        }
+      }
+    },
+    {
+      "name": "Get Price",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/price?country=US",
+          "host": ["{{base_url}}"],
+          "path": ["api", "price"],
+          "query": [
+            {
+              "key": "country",
+              "value": "US"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Facebook Ideas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"website_url\": \"https://xyz.com\",\n  \"industry\": \"ecommerce\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/facebook/ideas",
+          "host": ["{{base_url}}"],
+          "path": ["api", "facebook", "ideas"]
+        }
+      }
+    },
+    {
+      "name": "Facebook Planner",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"frequency\": 2,\n  \"tone\": \"witty\",\n  \"post_mix\": [\"educational\", \"promotional\"]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/facebook/planner",
+          "host": ["{{base_url}}"],
+          "path": ["api", "facebook", "planner"]
+        }
+      }
+    },
+    {
+      "name": "Get Facebook Posts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/facebook/posts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "facebook", "posts"]
+        }
+      }
+    },
+    {
+      "name": "Update Facebook Post",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"Updated post content\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/facebook/posts/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "facebook", "posts", "1"]
+        }
+      }
+    },
+    {
+      "name": "Publish Facebook Post",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 1\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/facebook/publish",
+          "host": ["{{base_url}}"],
+          "path": ["api", "facebook", "publish"]
+        }
+      }
+    }
+  ]
+}
